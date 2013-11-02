@@ -1,0 +1,10 @@
+{
+    "name": "gamification",
+    "dependencies": {
+        "express": "3.4.4",
+        "lodash": "2.2.1"
+    },
+    "devDependencies": {
+      "nodeunit": "0.8.1"
+    }
+}
