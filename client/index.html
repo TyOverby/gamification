@@ -34,23 +34,31 @@
     				<label for="goal_name">Goal</label>
     				<input type="text" id="goal_name"/>
     			</form>
-    			<div><a id="goal_name_next" data-transition="slide" href="#subtasks">Next</a></div>
+    			<div><a id="goal_name_next" data-transition="slide" href="#subtask_page">Next</a></div>
     			
     		</div>
     		<div data-role="footer"></div>
     	</div>
 
-    	<div data-role="page" id="subtasks">
+    	<div data-role="page" id="subtask_page">
     		<div data-role="header">
     			<h1></h1>
     			<div><a data-transition="slide" data-direction="reverse" href="#home">Back</a></div>
     		</div>
 
     		<div data-role="content">
-    			<form id="subtask_form0">
-
+    			<div id="subtasks">
+    				<!--All tasks added will go here.-->
+    			</div>
+    			<!--This form takes user input to determine the subtasks to be added to the current parent.-->
+    			<form id="subtask_form">
+    				<label for="goal_name">Task Name</label>
+    				<input type="text" id="task_name"/>
+    				<label id="difficulty_label" for="difficulty">Task Difficulty: None</label>
+    				<input id="difficulty" class="ui-hidden-accessible" data-type="range" value="0" min="0" max="3" step="1" data-highlight="true">
+    				<button type="button" id="add_subtask">+Add</button>
     			</form>
-    			<button id="add_subtask">+Add Task</button>
+    			
     			<div><a data-transition="slide" href="#subtasks">Next</a></div>
     			
     		</div>
