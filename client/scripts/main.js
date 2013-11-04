@@ -3,9 +3,10 @@
 $(document).ready(
 
 	function(){
+		$.mobile.changePage("#home");
 		$("#goal_name_next").bind("click", newGoal);
 		$("#difficulty").bind("change", updateDifficulty);
-		$("#add_subtask").bind("change", addSubtask);
+		$("#add_subtask").bind("click", addSubtask);
 
 		window.goals = [];
 	}
@@ -43,9 +44,9 @@ function updateDifficulty(){
 	}
 }
 
-function Goal(name, number, num){
+function Goal(name, number){
 	this.goalName = name;
-	this.pageform = this.pageform = $('subtask_form'+num);
+	this.pageform = this.pageform = $('#subtask_form'+number);
 	this.subtasks = [];
 }
 
@@ -53,37 +54,50 @@ function Task(name, difficulty){
 	this.taskName = name;
 	this.difficulty = difficulty;
 
-	this.render = render;
+	Task.prototype.render = render;
+
 	function render(){
-		$('subtasks').append("<div><h2>"+this.taskName+"</h2><h3>Difficulty: "+this.difficulty+"</h3></div>");
+		var itemDisplay = $("<div>");
+		itemDisplay.append("<h2>"+this.taskName+"</h2>");
+		itemDisplay.append("<h3>Difficulty: "+this.difficulty+"</h3>");
+
+		var viewChildButton = $("<button>");
+		viewChildButton.attr("type", "button");
+		viewChildButton.addClass("view_child_button");
+		viewChildButton.html("...");
+		viewChildButton.bind("click", this.viewChildren);
+
+		itemDisplay.append(viewChildButton);
+		$('#subtasks').append(itemDisplay);
+	}
+
+	Task.prototype.viewChildren= viewChildren;
+
+	function viewChildren(){
+
+		//Reset the task display area.
+		$('#subtasks').html("");
+		$("#subtask_page>div>h1").html(this.taskName);
+
+		//Set the current Parent to this task.
+		window.currentParent = this;
+
+		//Show screen transition.
+		$.mobile.changePage("#subtask_page", allowSamePageTransition="true");
+
+		//Display all children.
+		for(var i; i < this.subtasks.length; i++){
+			this.subtasks[i].render;
+		}
 	}
 }
 
 function addSubtask(){
-	var taskName = $('task_name').val();
-	var difficulty = $('difficulty').val();
+	var taskName = $('#task_name').val();
+	var difficulty = $('#difficulty').val();
 	var currentTask = new Task(taskName, difficulty);
 	currentParent.subtasks.push(currentTask);
 	currentTask.render();
 }
 
-function addChildren(newParent){
-	$('subtasks').html("");
-	$("#subtask_page>div>h1").html(newParent.taskName);
-	window.currentParent = newParent;
-	$.mobile.changePage("#subtask_page", allowSamePageTransition="true");
 
-	for(var i; i < newParent.subtasks.length; i++){
-		newParent.subtasks[i].render;
-	}
-}
-	// var n = window.currentGoal.subtask.length;
-	// var form = document.createElement("form");
-	// form.id = 
-	// form.append('<div id="task_div'+n+'"></div>');
-	// var formContainer = $('#task_div'+n);
-
-	// formContainer.append('<label for="task_name">Task Name</label>');
-	// formContainer.append('<input type="text" class="task_name"/>');
- //    formContainer.append('<label class="difficulty_label" for="difficulty">Task Difficulty: None</label>');
- //    formContainer.append('<input class="difficulty" class="ui-hidden-accessible" data-type="range" value="0" min="0" max="3" step="1" data-highlight="true">');
