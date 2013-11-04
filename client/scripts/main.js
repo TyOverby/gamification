@@ -3,6 +3,7 @@
 $(document).ready(
 
 	function(){
+
 		$.mobile.changePage("#home");
 		$("#goal_name_next").bind("click", newGoal);
 		$("#difficulty").bind("change", updateDifficulty);
@@ -39,7 +40,7 @@ function updateDifficulty(){
 			label.html("Task Difficulty: Hard");
 			break;
 
-		default: 
+		default:
 			label.html("Task Difficulty: None");
 	}
 }
@@ -53,21 +54,19 @@ function Goal(name, number){
 function Task(name, difficulty){
 	this.taskName = name;
 	this.difficulty = difficulty;
+	this.subtasks = [];
 
 	Task.prototype.render = render;
 
 	function render(){
-		var itemDisplay = $("<div>");
+		var itemDisplay = $("<a>");
 		itemDisplay.append("<h2>"+this.taskName+"</h2>");
 		itemDisplay.append("<h3>Difficulty: "+this.difficulty+"</h3>");
-
-		var viewChildButton = $("<button>");
-		viewChildButton.attr("type", "button");
-		viewChildButton.addClass("view_child_button");
-		viewChildButton.html("...");
-		viewChildButton.bind("click", this.viewChildren);
-
-		itemDisplay.append(viewChildButton);
+		itemDisplay.attr("data-role", "button");
+		itemDisplay.attr("data-icon", "arrow-r");
+		itemDisplay.attr("data-iconpos", "right");
+		itemDisplay.button();
+		itemDisplay.bind("click", this.viewChildren);
 		$('#subtasks').append(itemDisplay);
 	}
 
@@ -83,7 +82,7 @@ function Task(name, difficulty){
 		window.currentParent = this;
 
 		//Show screen transition.
-		$.mobile.changePage("#subtask_page", allowSamePageTransition="true");
+		$.mobile.changePage("#subtask_page", {allowSamePageTransition: "true", transition: "slide"});
 
 		//Display all children.
 		for(var i; i < this.subtasks.length; i++){
